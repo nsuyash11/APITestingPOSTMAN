@@ -1,0 +1,531 @@
+{
+	"info": {
+		"_postman_id": "80f9b60d-ce65-4ae4-a1b4-0752e4451b0f",
+		"name": "Users-CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8125072",
+		"_collection_link": "https://www.postman.com/nsuyash11/workspace/dummy/collection/8125072-80f9b60d-ce65-4ae4-a1b4-0752e4451b0f?action=share&source=collection_link&creator=8125072"
+	},
+	"item": [
+		{
+			"name": "GET Users",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json()\r",
+							"pm.test(\"Response contains Data\", () => {\r",
+							"    pm.expect(responseBody.data).to.be.not.empty;\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/user",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CREATE User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000)\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\")\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json()\r",
+							"pm.test(\"ID Created for User\", () => {\r",
+							"    pm.expect(responseBody.id).to.be.a(\"string\");\r",
+							"    pm.expect(responseBody.id).to.have.lengthOf(24);\r",
+							"})\r",
+							"\r",
+							"pm.collectionVariables.set(\"userID\", responseBody.id);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var randomFirstName = Math.random().toString(36).substring(2,8);\r",
+							"var randomLastName = Math.random().toString(36).substring(2,8);\r",
+							"var randomEmail = randomFirstName + \"@abcde.com\" \r",
+							"\r",
+							"pm.collectionVariables.set(\"randomFirstName\", randomFirstName);\r",
+							"pm.collectionVariables.set(\"randomLastName\", randomLastName);\r",
+							"pm.collectionVariables.set(\"randomEmail\", randomEmail);\r",
+							"\r",
+							"console.log(\"randomFirstName = \" + randomFirstName);\r",
+							"console.log(\"randomLastName = \" + randomLastName);\r",
+							"console.log(\"randomEmail = \" + randomEmail);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"{{randomFirstName}}\",\r\n    \"lastName\":\"{{randomLastName}}\",\r\n    \"email\": \"{{randomEmail}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user/create",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User by ID (created)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json();\r",
+							"expectedID = pm.collectionVariables.get(\"userID\")\r",
+							"expectedFirstName = pm.collectionVariables.get(\"randomFirstName\");\r",
+							"expectedLastName = pm.collectionVariables.get(\"randomLastName\");\r",
+							"expectedEmail = pm.collectionVariables.get(\"randomEmail\");\r",
+							"\r",
+							"pm.test(\"Data is Correct\", () => {\r",
+							"    pm.expect(responseBody.id).to.be.eql(expectedID)\r",
+							"    pm.expect(responseBody.firstName).to.be.eql(expectedFirstName)\r",
+							"    pm.expect(responseBody.lastName).to.be.eql(expectedLastName)\r",
+							"    pm.expect(responseBody.email).to.be.eql(expectedEmail)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/user/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE User by ID",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var newFirstName = pm.collectionVariables.get(\"randomFirstName\") + \"New\";\r",
+							"var newLastName = pm.collectionVariables.get(\"randomLastName\") + \"New\";\r",
+							"var newEmail = pm.collectionVariables.get(\"randomEmail\") + \"New\";\r",
+							"\r",
+							"pm.collectionVariables.set(\"newFirstName\", newFirstName);\r",
+							"pm.collectionVariables.set(\"newLastName\", newLastName);\r",
+							"pm.collectionVariables.set(\"newEmail\", newEmail);\r",
+							"\r",
+							"console.log(\"newFirstName = \" + newFirstName);\r",
+							"console.log(\"newLastName = \" + newLastName);\r",
+							"console.log(\"newEmail = \" + newEmail);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json();\r",
+							"var expectedID = pm.collectionVariables.get(\"userID\");\r",
+							"expectedFirstName = pm.collectionVariables.get(\"newFirstName\");\r",
+							"expectedLastName = pm.collectionVariables.get(\"newLastName\");\r",
+							"expectedEmail = pm.collectionVariables.get(\"randomEmail\"); //email is forbidden to change\r",
+							"\r",
+							"pm.test(\"Data is Correct\", () => {\r",
+							"    pm.expect(responseBody.id).to.be.eql(expectedID)\r",
+							"    pm.expect(responseBody.firstName).to.be.eql(expectedFirstName)\r",
+							"    pm.expect(responseBody.lastName).to.be.eql(expectedLastName)\r",
+							"    pm.expect(responseBody.email).to.be.eql(expectedEmail)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"firstName\": \"{{newFirstName}}\",\r\n    \"lastName\":\"{{newLastName}}\",\r\n    \"email\": \"{{newEmail}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/user/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User by ID (updated)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json();\r",
+							"var expectedID = pm.collectionVariables.get(\"userID\");\r",
+							"expectedFirstName = pm.collectionVariables.get(\"newFirstName\");\r",
+							"expectedLastName = pm.collectionVariables.get(\"newLastName\");\r",
+							"expectedEmail = pm.collectionVariables.get(\"randomEmail\"); //email is forbidden to change\r",
+							"\r",
+							"pm.test(\"Data is Correct\", () => {\r",
+							"    pm.expect(responseBody.id).to.be.eql(expectedID)\r",
+							"    pm.expect(responseBody.firstName).to.be.eql(expectedFirstName)\r",
+							"    pm.expect(responseBody.lastName).to.be.eql(expectedLastName)\r",
+							"    pm.expect(responseBody.email).to.be.eql(expectedEmail)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/user/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE User by ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 200\", () => {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status Message is OK\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"OK\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json();\r",
+							"var expectedID = pm.collectionVariables.get(\"userID\");\r",
+							"\r",
+							"pm.test(\"Data is Correct\", () => {\r",
+							"    pm.expect(responseBody.id).to.be.eql(expectedID)\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/user/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET User by ID (deleted)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status Code is 404\", () => {\r",
+							"    pm.response.to.have.status(404);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Status Message is Not Found\", () => {\r",
+							"    pm.expect(pm.response.status).to.be.eq(\"Not Found\");\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Response Time is below 1000ms\", () => {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Content-Type Header is app/json\", () => {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");\r",
+							"})\r",
+							"\r",
+							"var responseBody = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Not Found Error Message Body\", () => {\r",
+							"    pm.expect(responseBody.error).to.be.eql(\"RESOURCE_NOT_FOUND\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "app-id",
+						"value": "{{app-id}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/user/{{userID}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"user",
+						"{{userID}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "app-id",
+			"value": "6574b3d54580ae70870efd87",
+			"type": "string"
+		},
+		{
+			"key": "userID",
+			"value": ""
+		},
+		{
+			"key": "randomFirstName",
+			"value": ""
+		},
+		{
+			"key": "randomLastName",
+			"value": ""
+		},
+		{
+			"key": "randomEmail",
+			"value": ""
+		},
+		{
+			"key": "newFirstName",
+			"value": ""
+		},
+		{
+			"key": "newLastName",
+			"value": ""
+		},
+		{
+			"key": "newEmail",
+			"value": ""
+		}
+	]
+}
